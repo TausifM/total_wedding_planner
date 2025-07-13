@@ -17,8 +17,6 @@ export default function RootLayout() {
     'Montserrat-Regular': require('../assets/fonts/Montserrat-Regular.ttf'),
     "Poppins-Bold": require('../assets/fonts/poppins.bold.ttf'),
     "Poppins-Regular": require('../assets/fonts/poppins.regular.ttf'),
-    "GlacialIndifference-Regular": require('../assets/fonts/GlacialIndifference-Regular.otf'),
-    "GlacialIndifference-Bold": require('../assets/fonts/GlacialIndifference-Bold.otf'),
   });
 
   if (!loaded) {
