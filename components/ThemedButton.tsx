@@ -2,20 +2,22 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import {
-    GestureResponderEvent,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Colors, Fonts } from "../constants/Themes"; // Adjust the import path as necessary
 
 type ThemedButtonProps = {
   label: string;
   onPress: (event: GestureResponderEvent) => void;
+  iconName?: React.ComponentProps<typeof Ionicons>["name"]; // Use Ionicons supported icon names
+  marginRight?: number; // Optional prop for right margin
 };
 
-const ThemedButton: React.FC<ThemedButtonProps> = ({ label, onPress }) => {
+const ThemedButton: React.FC<ThemedButtonProps> = ({ label, onPress, iconName ="arrow-forward", marginRight = 0 }) => {
   return (
     <LinearGradient
       colors={[Colors.primary, Colors.secondary, Colors.dark, Colors.darkest]}
@@ -25,10 +27,11 @@ const ThemedButton: React.FC<ThemedButtonProps> = ({ label, onPress }) => {
     >
       <TouchableOpacity onPress={onPress} style={styles.fullButton}>
         <View style={styles.buttonContent}>
-          <Text style={styles.buttonLabel}>{label}</Text>
+          <Text style={[styles.buttonLabel, { marginRight }]}>
+            {label}</Text>
           <View style={styles.iconContainer}>
             <Ionicons
-              name="arrow-forward"
+              name={iconName}
               size={24}
               color={Colors.textDark}
             />
