@@ -1,10 +1,11 @@
 import BackHeader from "@/components/BackHeader";
-import CalendarModal from "@/components/CalendarModal";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ServiceDetailsSmallImageCard from "@/components/ServiceDetailsSmallImageCard";
 import ThemedButton from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
-import ThemedWhiteButton from "@/components/ThemedWhiteButton";
+import { ThemedView } from "@/components/ThemedView";
 import { Ionicons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import {
@@ -36,26 +37,14 @@ const ServiceDetails = () => {
     price = "Starting from $5,000",
     time = "Available in Oct",
   } = params;
-  const [isCalendarVisible, setCalendarVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [eventDate, setEventDate] = useState<Date | null>(null);
   const route = useRouter();
-  const markedDates = {
-    "2025-10-10": { marked: true, dotColor: "green" },
-    "2025-10-12": { marked: true, dotColor: "red", disabled: true },
-    "2025-10-15": { selected: true, selectedColor: "#4CAF50" },
-    // More can be added
-  };
+
   return (
-    <View style={styles.container}>
-      <Animated.ScrollView
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true }
-        )}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={16}
-      >
-        {/* Hero Carousel */}
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: "#FEF4EA", dark: "#353636" }}
+      headerImage={
         <View style={styles.imageWrapper}>
           <Carousel
             loop
@@ -73,34 +62,50 @@ const ServiceDetails = () => {
             <Ionicons name="heart-outline" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
-
-        <Animated.View
-          style={{
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [0, 300],
-                  outputRange: [0, -50], // Moves upward as you scroll
-                  extrapolate: "clamp",
-                }),
-              },
-            ],
-          }}
-        >
+      }
+    >
+      <ThemedView style={styles.container}>
+        <>
+        <ThemedText type="subtitle">Dream Palace</ThemedText>
           {/* Info Block */}
-          <TouchableOpacity
-            onPress={() => setCalendarVisible(true)}
+          <View style={styles.ratingContainer}>
+            <View style={styles.rowBetween}>
+              {/* Rating Button */}
+              <TouchableOpacity style={styles.purpleButton}>
+                <Ionicons name="star" size={16} color="#FFD700" />
+                <Text style={styles.purpleButtonText}>{rating}</Text>
+              </TouchableOpacity>
+
+              {/* Time Button */}
+              <TouchableOpacity style={styles.whiteButton}>
+                <Text style={styles.whiteButtonText}>{time}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* <TouchableOpacity
+            onPress={() => setShowDatePicker(true)}
             style={styles.row}
           >
-            <Ionicons name="star" size={16} color="#FFD700" />
-            <Text style={styles.rating}>{rating}</Text>
-            <Text style={styles.dot}>•</Text>
-            <Text style={styles.time}>{selectedDate || time}</Text>
-          </TouchableOpacity>
-
+            <Text style={styles.time}>
+              {eventDate ? eventDate.toDateString() : time}
+            </Text>
+          </TouchableOpacity> */}
+          {showDatePicker && (
+            <DateTimePicker
+              value={eventDate ?? new Date()}
+              mode="date"
+              display="inline" // Better for styling on iOS
+              onChange={(event, selectedDate) => {
+                setShowDatePicker(false);
+                if (selectedDate) setEventDate(selectedDate);
+              }}
+              themeVariant="light" // Use light theme for better visibility
+              style={{ backgroundColor: "purple" }} // Ensure background is white
+            />
+          )}
           {/* Description */}
           <View style={styles.section}>
-            <ThemedText type="subtitle">Dream Palace</ThemedText>
             <Text style={styles.description}>
               Experience a fairy-tale venue tailored for your dream wedding. Our
               team ensures perfection with every detail from décor to lighting.
@@ -121,29 +126,20 @@ const ServiceDetails = () => {
             </View>
           </View>
           <ServiceDetailsSmallImageCard />
+          <ServiceDetailsSmallImageCard />
+          <ServiceDetailsSmallImageCard />
 
           {/* Buttons */}
           <View style={styles.buttonsContainer}>
-            <ThemedWhiteButton
-              label="Contact Venue"
-              onPress={() => console.log("Contact Venue Pressed")}
-              iconName="chatbubble-ellipses-outline"
-            />
             <ThemedButton
-              label="Book Now"
+              label="Add to cart"
               onPress={() => route.push("/BudgetPlannerScreen")}
               iconName="cart"
             />
           </View>
-        </Animated.View>
-            <CalendarModal
-        isVisible={isCalendarVisible}
-        onClose={() => setCalendarVisible(false)}
-        onDateSelect={(date) => setSelectedDate(date)}
-        markedDates={markedDates}
-      />
-      </Animated.ScrollView>
-    </View>
+        </>
+      </ThemedView>
+    </ParallaxScrollView>
   );
 };
 
@@ -153,16 +149,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FEF4EA",
+    paddingHorizontal: 10
   },
   imageWrapper: {
     position: "relative",
+    top: 10,
+    backgroundColor: '#ee5011ff',
   },
   heroImage: {
     width: "100%",
-    height: 260,
-    resizeMode: "cover",
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    height: 300,
   },
   bookmarkIcon: {
     position: "absolute",
@@ -173,37 +169,57 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     zIndex: 10,
   },
+  ratingContainer: {
+    marginVertical: 5,
+    alignItems: "center",
+  },
+  rowBetween: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%", // Controls the outer width
+    gap: 10, // Or marginRight if not using RN 0.71+
+  },
+  purpleButton: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    backgroundColor: "#C07D7D",
+    borderRadius: 10,
+  },
+  purpleButtonText: {
+    color: "#fff",
+    fontFamily: "Poppins-Bold",
+    fontSize: 14,
+    marginLeft: 6,
+  },
+  whiteButton: {
+    flex: 1,
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#C07D7D",
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  whiteButtonText: {
+    color: "#C07D7D",
+    fontFamily: "Poppins-Regular",
+    fontSize: 14,
+  },
   infoContainer: {
     backgroundColor: "#FEF4EA",
-    padding: 20,
-    marginTop: -20,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    // marginTop: -20,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
   },
   title: {
     fontSize: 22,
     fontFamily: "Poppins-Bold",
     color: "#2A1524",
     marginBottom: 8,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  rating: {
-    fontSize: 14,
-    color: "#423840",
-    marginLeft: 4,
-  },
-  dot: {
-    marginHorizontal: 6,
-    fontSize: 14,
-    color: "#423840",
-  },
-  time: {
-    fontSize: 14,
-    color: "#423840",
   },
   price: {
     backgroundColor: "#FCD8B6",
@@ -223,7 +239,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   section: {
-    paddingHorizontal: 20,
     marginTop: 5,
   },
   sectionTitle: {
@@ -241,7 +256,6 @@ const styles = StyleSheet.create({
   tagContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingHorizontal: 20,
     marginTop: 12,
   },
   tag: {

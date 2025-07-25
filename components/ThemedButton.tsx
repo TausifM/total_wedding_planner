@@ -15,15 +15,16 @@ type ThemedButtonProps = {
   onPress: (event: GestureResponderEvent) => void;
   iconName?: React.ComponentProps<typeof Ionicons>["name"]; // Use Ionicons supported icon names
   marginRight?: number; // Optional prop for right margin
+  style?: object; // Optional style prop for additional styling
 };
 
-const ThemedButton: React.FC<ThemedButtonProps> = ({ label, onPress, iconName ="arrow-forward", marginRight = 0 }) => {
+const ThemedButton: React.FC<ThemedButtonProps> = ({ label, onPress, iconName ="arrow-forward", marginRight = 0, style }) => {
   return (
     <LinearGradient
       colors={[Colors.primary, Colors.secondary, Colors.dark, Colors.darkest]}
         start={{ x: 1, y: 1 }}
         end={{ x: 0, y: 0}}
-      style={styles.wrapper}
+      style={[styles.wrapper, style || {}]}
     >
       <TouchableOpacity onPress={onPress} style={styles.fullButton}>
         <View style={styles.buttonContent}>

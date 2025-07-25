@@ -1,27 +1,31 @@
+import BackHeader from "@/components/BackHeader";
 import SummaryCard from "@/components/SummaryCard";
 import ThemedButton from "@/components/ThemedButton";
+import { ThemedText } from "@/components/ThemedText";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import BigImageCard from "../components/BigImageCard";
-import { essentialCategories } from "../data/essentialCategories";
-import { sellers } from "../data/sellers";
-import { Seller } from "../types/seller_types";
-import { planWedding } from "../utils/planWedding";
+import BigImageCard from "../../components/BigImageCard";
+import { essentialCategories } from "../../data/essentialCategories";
+import { sellers } from "../../data/sellers";
+import { Seller } from "../../types/seller_types";
+import { planWedding } from "../../utils/planWedding";
 
 export default function BudgetPlannerScreen() {
   const [budgetInput, setBudgetInput] = useState("");
   const [result, setResult] = useState<any | null>(null);
   const [eventDate, setEventDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const inputRef = useRef<TextInput>(null);
   // Show formatted date
   const formattedDate = eventDate.toISOString().split("T")[0]; // YYYY-MM-DD
   const handlePlan = () => {
@@ -31,24 +35,62 @@ export default function BudgetPlannerScreen() {
     const data = planWedding(budget, sellers, essentialCategories);
     setResult({ budget, ...data });
   };
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputRef.current?.focus(); // This opens the mobile typing keyboard
+    }, 300); // Delay helps avoid layout conflicts
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Plan My Wedding</Text>
+      <BackHeader title="Budget Planner" style={{ marginBottom: 2 }} />
+      <Image
+        source={require("../../assets/images/wedding-bg.jpg")}
+        style={{ width: "100%", height: 200, borderRadius: 10 }}
+      />
+      <ThemedText style={styles.title}>Plan Your Wedding Budget</ThemedText>
+      {/* <Text style={styles.title}>Plan My Wedding</Text> */}
+      <Text style={styles.subtitle}>
+        Enter your budget to see how you can allocate it across essential
+        categories.
+      </Text>
+      <Text style={styles.subtitle}>
+        This will help you understand how to best utilize your budget.
+      </Text>
+      <Text style={styles.subtitle}>
+        Note: This is a basic planner and does not include all possible
+        expenses.
+      </Text>
+      <Text style={styles.subtitle}>
+        For a more detailed plan, please use the full planner.
+      </Text>
+      <Text style={styles.subtitle}>
+        Enter your budget below to get started.
+      </Text>
 
       <TextInput
+        ref={inputRef}
         placeholder="Enter your budget (₹)"
         keyboardType="numeric"
-        style={styles.input}
         value={budgetInput}
         onChangeText={setBudgetInput}
+        onKeyPress={(e) => {
+          if (e.nativeEvent.key === "Enter") {
+            handlePlan();
+          }
+        }}
+        style={styles.input}
+        keyboardAppearance="dark"
+        returnKeyType="done"
       />
       <ThemedButton
         label="Plan Wedding"
         onPress={handlePlan}
         iconName="arrow-forward"
         marginRight={10}
-        />
+      />
       {/* <Text style={styles.planButton} onPress={handlePlan}>
         Show My Plan
       </Text> */}
@@ -85,7 +127,7 @@ export default function BudgetPlannerScreen() {
                   budget: result.budget,
                   commission: result.commission,
                   usableBudget: result.usableBudget,
-                   included: JSON.stringify(result.included),
+                  included: JSON.stringify(result.included),
                 },
               })
             }
@@ -93,7 +135,6 @@ export default function BudgetPlannerScreen() {
           >
             <Text style={styles.cartButtonText}>Proceed to Payment</Text>
           </TouchableOpacity>
-    
 
           {essentialCategories.map((category) => (
             <View key={category} style={{ marginTop: 20 }}>
@@ -136,7 +177,7 @@ export default function BudgetPlannerScreen() {
                         image={
                           s.image
                             ? s.image
-                            : require("../assets/images/unnamed.jpg")
+                            : require("../../assets/images/unnamed.jpg")
                         }
                         name={s.name}
                         rating={s.rating ? String(s.rating) : "4.0"}
@@ -163,11 +204,17 @@ export default function BudgetPlannerScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 50,
+    paddingVertical: 20,
     paddingHorizontal: 16,
     flexGrow: 1,
     justifyContent: "center",
     backgroundColor: "#FEF4EA",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#8A003B",
+    marginBottom: 10,
+    fontFamily: "Montserrat-Regular",
   },
   cartButton: {
     backgroundColor: "#007aff",
@@ -232,10 +279,13 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 12,
+    padding: 18,
     borderRadius: 10,
     fontSize: 16,
     marginBottom: 16,
+    backgroundColor: "#fff",
+    color: "#333",
+    fontFamily: "Montserrat-Regular",
   },
   planButton: {
     backgroundColor: "#8A003B",

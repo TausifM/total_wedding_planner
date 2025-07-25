@@ -8,19 +8,18 @@ type BackHeaderProps = {
   title?: string;
   gradientColors?: string[];
     topOffset?: number; // Optional prop to adjust the top offset
+    style?: object; // Optional style prop for additional styling
 };
 
 const BackHeader: React.FC<BackHeaderProps> = ({
-  title = '',
-  gradientColors = ['#FF6B6B', '#FFA07A'], // default gradient
     topOffset = 40,
+  style = {},
 }) => {
   const router = useRouter();
 
   return (
     <LinearGradient colors={["#8A003B", "#67002B", "#49001D", "#46011D"]}
-             style={[styles.container, { top: topOffset }]}
-          >
+             style={[styles.container, { top: topOffset }, style]}>
      <TouchableOpacity onPress={() => router.back()} style={styles.button}>
         {/* Optional title can be displayed here */}
         <Ionicons name="chevron-back" size={22} color={iconColor} />

@@ -3,9 +3,11 @@ import BigImageCard from '@/components/BigImageCard';
 import HamburgerHeader from '@/components/HamburgerHeader';
 import SideMenu from '@/components/SideMenu';
 import SmallImageCard from '@/components/SmallImageCard';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -21,45 +23,130 @@ export default function HomeScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const categories = [
-    { name: 'Venues', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Catering', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Photography', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Bridal Wear', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Groom Wear', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Makeup', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Decor', image: require('../assets/images/unnamed.jpg') },
-    { name: 'Entertainment', image: require('../assets/images/unnamed.jpg') },
+    { name: 'Venues', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Catering', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Photography', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Bridal Wear', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Groom Wear', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Makeup', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Decor', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Entertainment', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Invitations', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Transport', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Jewelry', image: require('../../assets/images/unnamed.jpg') },
+    { name: 'Honeymoon', image: require('../../assets/images/unnamed.jpg') },
   ];
 
-  const popularServices = [
-    {
-      name: 'Dream Palace Venue',
-      price: 'Starting from $5,000',
-      rating: '⭐ 4.9',
-      time: 'Available in Oct',
-      image: require('../assets/images/unnamed.jpg'),
-      tag: 'Exclusive',
-    },
-    {
-      name: 'Elite Photography',
-      price: '$1,500/day',
-      rating: '⭐ 4.8',
-      time: 'Flexible Slots',
-      image: require('../assets/images/unnamed.jpg'),
-      tag: 'Popular',
-    },
-    {
-      name: 'Royal Catering Co.',
-      price: 'From $25/person',
-      rating: '⭐ 4.7',
-      time: '2 Weeks Notice',
-      image: require('../assets/images/unnamed.jpg'),
-      tag: 'Best Seller',
-    },
-  ];
+const popularServices = [
+  {
+    name: 'Dream Palace Venue',
+    price: 'Starting from ₹5,00,000',
+    rating: '⭐ 4.9',
+    time: 'Available in Oct',
+    image: require('../../assets/images/unnamed.jpg'),
+    tag: 'Exclusive',
+    unavailableTime: ['2025-07-20', '2025-08-10'],
+    servicesOffered: [
+      {
+        name: 'Banquet Hall Rental',
+        price: '₹3,00,000',
+        description: 'Spacious hall with elegant interiors and stage setup.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.8',
+        unavailableTime: ['2025-07-20']
+      },
+      {
+        name: 'Decor & Lighting',
+        price: '₹1,00,000',
+        description: 'Customizable lighting with floral stage decor.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.7',
+        unavailableTime: ['2025-08-10']
+      },
+      {
+        name: 'On-site Coordinator',
+        price: '₹50,000',
+        description: 'Event coordinator to manage schedule and logistics.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.9',
+        unavailableTime: []
+      }
+    ]
+  },
+  {
+    name: 'Elite Photography',
+    price: '₹1,50,000/day',
+    rating: '⭐ 4.8',
+    time: 'Flexible Slots',
+    image: require('../../assets/images/unnamed.jpg'),
+    tag: 'Popular',
+    unavailableTime: ['2025-07-18', '2025-08-05'],
+    servicesOffered: [
+      {
+        name: 'Wedding Day Shoot',
+        price: '₹1,20,000',
+        description: 'Full-day candid and traditional coverage.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.9',
+        unavailableTime: ['2025-07-18']
+      },
+      {
+        name: 'Pre-Wedding Shoot',
+        price: '₹30,000',
+        description: 'Outdoor shoot at selected locations.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.8',
+        unavailableTime: []
+      },
+      {
+        name: 'Photo Album',
+        price: '₹10,000',
+        description: 'Premium printed album with leather binding.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.7',
+        unavailableTime: ['2025-08-05']
+      }
+    ]
+  },
+  {
+    name: 'Royal Catering Co.',
+    price: 'From ₹2,500/person',
+    rating: '⭐ 4.7',
+    time: '2 Weeks Notice',
+    image: require('../../assets/images/unnamed.jpg'),
+    tag: 'Best Seller',
+    unavailableTime: ['2025-07-25'],
+    servicesOffered: [
+      {
+        name: 'Multi-Cuisine Buffet',
+        price: '₹2,000/person',
+        description: 'Includes Indian, Chinese, Continental, and desserts.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.8',
+        unavailableTime: ['2025-07-25']
+      },
+      {
+        name: 'Live Counters',
+        price: '₹500/person',
+        description: 'Chaat, Pasta, Barbeque live stations.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.7',
+        unavailableTime: []
+      },
+      {
+        name: 'Mocktail Bar',
+        price: '₹300/person',
+        description: 'Unlimited beverages served by professionals.',
+        image: require('../../assets/images/unnamed.jpg'),
+        rating: '4.9',
+        unavailableTime: []
+      }
+    ]
+  }
+];
 
   return (
-    <View style={styles.parentContainer}>
+    <ThemedView style={styles.parentContainer}>
       <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
       {/* Navigation Bar */}
@@ -98,7 +185,7 @@ export default function HomeScreen() {
       </ScrollView>
 <View style={styles.popularSection}>
   <View style={styles.sectionHeader}>
-    <Text style={styles.sectionTitle}>Popular Wedding Services</Text>
+    <ThemedText style={styles.sectionTitle}>Popular Wedding Services</ThemedText>
     <TouchableOpacity>
       <Text style={styles.viewAll}>View All</Text>
     </TouchableOpacity>
@@ -121,7 +208,7 @@ export default function HomeScreen() {
         rating: service.rating,
         price: service.price,
         time: service.time,
-        image: service.image ? service.image : require('../assets/images/unnamed.jpg'),
+        image: service.image ? service.image : require('../../assets/images/unnamed.jpg'),
       },
     })
   }
@@ -143,7 +230,7 @@ export default function HomeScreen() {
           <BigImageCard
             key={index}
             image={service.image}
-            restaurant={service.name}
+            name={service.name}
             rating={service.rating}
             deliveryTime={service.time}
             deliveryType= {service.tag} 
@@ -155,7 +242,7 @@ export default function HomeScreen() {
     </View>
     </ScrollView>
       <SideMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />
-    </View>
+    </ThemedView>
   );
 }
 
@@ -164,10 +251,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFF8F5',
     paddingTop: 30, // Adjust for status bar height
-    paddingBottom: 20,
+    paddingBottom: 110,
+    //paddingVertical:130,
   },
   container: {
-    marginVertical: 20,
+    marginVertical: 10,
     paddingHorizontal: 8,
   },
   foodContainer: {
@@ -244,6 +332,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    backgroundColor: '#FFF8F5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    borderRadius: 10,
   },
   navTitle: {
     fontSize: 22,
@@ -262,9 +361,8 @@ sectionHeader: {
 },
 
 sectionTitle: {
-  fontSize: 14,
+  fontSize: 16,
   fontFamily: 'Poppins-Regular',
-  fontWeight: '700',
   color: '#372030',
 },
 
@@ -373,7 +471,7 @@ serviceTime: {
   label: {
     marginTop: 8,
     fontSize: 13,
-    fontFamily: 'Montserrat-SemiBold',
+    fontFamily: 'Poppins-Regular',
     color: '#5C3D3D',
   },
   sectionHeading: {

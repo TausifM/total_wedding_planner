@@ -8,11 +8,17 @@ export const GlobalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md + 2,
+    paddingHorizontal: Spacing.md,
     marginBottom: Spacing.md,
     fontSize: 16,
     fontFamily: Fonts.regular,
     color: "#333",
+  },
+    label: {
+    fontFamily: Fonts.regular,
+    fontSize: 14,
+    marginBottom: 2,
+    color: Colors.primary,
   },
   heading: {
     fontFamily: Fonts.heading,
@@ -24,7 +30,7 @@ export const GlobalStyles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     color: Colors.error,
-    marginBottom: Spacing.sm,
+    marginBottom: 4,
     marginLeft: 4,
     fontFamily: Fonts.regular,
   },

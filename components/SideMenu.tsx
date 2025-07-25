@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TouchableOpacity,
-    View,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { ThemedText } from './ThemedText';
 
 interface Props {
   visible: boolean;
@@ -63,7 +64,7 @@ function MenuItem({
 }) {
   return (
     <TouchableOpacity style={styles.menuItem} activeOpacity={0.6}>
-      <Text style={styles.menuText}>{label}</Text>
+      <ThemedText type='default'>{label}</ThemedText>
       {toggle && (
         <Switch
           value={toggleValue}
@@ -80,6 +81,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-start',
+    zIndex: 9999, // 👈 ensures it's above everything
+    elevation: 9999
   },
   drawer: {
     width: '75%',
@@ -93,7 +96,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 4, height: 0 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
-    elevation: 6,
+    elevation: 20, // 👈 Android shadow layer
+    zIndex: 10000, // 👈 optional but helpful for drawer stacking
   },
   profile: {
     alignItems: 'center',

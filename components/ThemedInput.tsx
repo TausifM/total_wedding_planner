@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { GlobalStyles } from "../constants/styles";
-import { Colors, Fonts } from "../constants/Themes";
+import { Colors } from "../constants/Themes";
 
 type ThemedInputProps = {
   label?: string;
@@ -26,13 +26,15 @@ const ThemedInput: React.FC<ThemedInputProps> = ({
   touched,
   ...props
 }) => {
+  console.log("Global input style", GlobalStyles.input);
   return (
     <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={GlobalStyles.label}>{label}</Text>}
       <TextInput
         style={[
           GlobalStyles.input,
           touched && error ? styles.errorBorder : null,
+          props.style,
         ]}
         placeholderTextColor="#999"
         {...props}
@@ -49,12 +51,6 @@ export default ThemedInput;
 const styles = StyleSheet.create({
   container: {
     marginBottom: 2,
-  },
-  label: {
-    fontFamily: Fonts.regular,
-    fontSize: 14,
-    marginBottom: 2,
-    color: Colors.primary,
   },
   errorBorder: {
     borderColor: Colors.error,

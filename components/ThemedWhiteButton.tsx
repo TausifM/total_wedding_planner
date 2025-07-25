@@ -1,11 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
 import {
-    GestureResponderEvent,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { Colors, Fonts } from "../constants/Themes"; // Adjust the path as needed
 

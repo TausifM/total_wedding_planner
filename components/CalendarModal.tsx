@@ -1,85 +1,57 @@
-import React from 'react';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import { useState } from "react";
 import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
-} from 'react-native';
-import { Calendar } from 'react-native-calendars';
-import Modal from 'react-native-modal';
-
-const screenHeight = Dimensions.get('window').height;
+  Platform,
+} from "react-native";
 
 interface CalendarModalProps {
   isVisible: boolean;
   onClose: () => void;
   onDateSelect?: (date: string) => void;
-  markedDates?: { [key: string]: any };
 }
 
 const CalendarModal: React.FC<CalendarModalProps> = ({
   isVisible,
   onClose,
   onDateSelect,
-  markedDates = {},
 }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+const handleChange = (
+  event: DateTimePickerEvent,
+  date?: Date | undefined
+) => {
+  if (event.type === "set" && date) {
+    setSelectedDate(date);
+    onDateSelect?.(date.toISOString().split("T")[0]);
+
+    // For Android only: DateTimePicker auto-closes, so defer close slightly
+    if (Platform.OS === "android") {
+      setTimeout(() => {
+        onClose();
+      }, 100); // 100ms delay prevents flicker
+    }
+  } else if (event.type === "dismissed") {
+    onClose(); // user canceled
+  }
+};
+
+
   return (
-    <Modal
-      isVisible={isVisible}
-      onBackdropPress={onClose}
-      backdropOpacity={0.4}
-      style={styles.modal}
-    >
-      <View style={styles.container}>
-        <Text style={styles.title}>Availability Calendar</Text>
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          <Calendar
-            markedDates={markedDates}
-            onDayPress={(day) => {
-              onDateSelect?.(day.dateString);
-              onClose();
-            }}
-            style={styles.calendar}
-            theme={{
-              backgroundColor: '#fff',
-              calendarBackground: '#fff',
-              selectedDayBackgroundColor: '#4CAF50',
-              todayTextColor: '#4CAF50',
-              arrowColor: '#4CAF50',
-              textSectionTitleColor: '#2A1524',
-            }}
-          />
-        </ScrollView>
-      </View>
-    </Modal>
+   <DateTimePicker
+  value={selectedDate}
+  mode="date"
+  display={Platform.OS === "ios" ? "inline" : "calendar"}
+  onChange={handleChange}
+  themeVariant="dark"
+  textColor="white"
+  style={{ backgroundColor: "#6A1B9A" }}
+/>
+
   );
 };
 
 export default CalendarModal;
 
-const styles = StyleSheet.create({
-  modal: {
-    justifyContent: 'center',
-    margin: 0,
-  },
-  container: {
-    backgroundColor: '#fff',
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 20,
-    maxHeight: screenHeight * 0.8,
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: 'Poppins-Bold',
-    color: '#2A1524',
-    marginBottom: 12,
-  },
-  scrollContent: {
-    paddingBottom: 20,
-  },
-  calendar: {
-    borderRadius: 10,
-  },
-});

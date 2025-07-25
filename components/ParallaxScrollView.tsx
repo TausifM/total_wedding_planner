@@ -68,6 +68,7 @@ export default function ParallaxScrollView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FEF4EA",
   },
   header: {
     height: HEADER_HEIGHT,
@@ -75,7 +76,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 32,
+    padding: 12,
+    backgroundColor: "#FEF4EA",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    marginTop: -20,
+    paddingBottom: 120, // Ensure content doesn't overlap with bottom tab
     gap: 16,
     overflow: 'hidden',
   },
