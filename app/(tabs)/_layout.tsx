@@ -23,6 +23,7 @@ export default function TabLayout() {
           />
           <Tabs.Screen name="seller_screen" options={{ title: "Seller" }} />
           <Tabs.Screen name="CartSummaryScreen" options={{ title: "Cart" }} />
+          {/* <Tabs.Screen name="ChooseCategoriesScreen" options={{ title: "ChooseCategories" }} /> */}
         </Tabs>
       </ThemedView>
       <SideMenu visible={menuVisible} onClose={() => setMenuVisible(false)} />

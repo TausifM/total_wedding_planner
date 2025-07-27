@@ -1,4 +1,4 @@
-import BackHeader from "@/components/BackHeader";
+import ImageCarousel from "@/components/ImageCarausel";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import ServiceDetailsSmallImageCard from "@/components/ServiceDetailsSmallImageCard";
 import ThemedButton from "@/components/ThemedButton";
@@ -7,17 +7,14 @@ import { ThemedView } from "@/components/ThemedView";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import {
-  Animated,
   Dimensions,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import Carousel from "react-native-reanimated-carousel";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -28,13 +25,12 @@ const images = [
 ];
 
 const ServiceDetails = () => {
-  const scrollY = useRef(new Animated.Value(0)).current;
   const params = useLocalSearchParams();
   const {
-    image,
-    title = "Dream Palace Venue",
+    //image,
+    //title = "Dream Palace Venue",
     rating = "4.9",
-    price = "Starting from $5,000",
+   // price = "Starting from $5,000",
     time = "Available in Oct",
   } = params;
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -45,23 +41,7 @@ const ServiceDetails = () => {
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#FEF4EA", dark: "#353636" }}
       headerImage={
-        <View style={styles.imageWrapper}>
-          <Carousel
-            loop
-            width={screenWidth}
-            height={260}
-            autoPlay
-            data={images}
-            scrollAnimationDuration={1000}
-            renderItem={({ item }: { item: number }) => (
-              <Image source={item} style={styles.heroImage} />
-            )}
-          />
-          <BackHeader />
-          <TouchableOpacity style={styles.bookmarkIcon}>
-            <Ionicons name="heart-outline" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
+      <ImageCarousel images={images} />
       }
     >
       <ThemedView style={styles.container}>
@@ -154,7 +134,6 @@ const styles = StyleSheet.create({
   imageWrapper: {
     position: "relative",
     top: 10,
-    backgroundColor: '#ee5011ff',
   },
   heroImage: {
     width: "100%",

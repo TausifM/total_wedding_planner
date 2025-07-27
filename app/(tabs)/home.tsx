@@ -3,6 +3,7 @@ import BigImageCard from '@/components/BigImageCard';
 import HamburgerHeader from '@/components/HamburgerHeader';
 import SideMenu from '@/components/SideMenu';
 import SmallImageCard from '@/components/SmallImageCard';
+import SortFilterHeader from '@/components/SortFilterHeader';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { Ionicons } from '@expo/vector-icons';
@@ -183,6 +184,7 @@ const popularServices = [
           </TouchableOpacity>
         ))}
       </ScrollView>
+        <SortFilterHeader />
 <View style={styles.popularSection}>
   <View style={styles.sectionHeader}>
     <ThemedText style={styles.sectionTitle}>Popular Wedding Services</ThemedText>
