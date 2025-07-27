@@ -4,6 +4,7 @@ import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+import { LocationProvider } from '@/context/LocationContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -24,8 +25,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       {/* ✅ Just Slot here — don't re-declare Stack or Tabs */}
+      <LocationProvider>
       <Slot />
       <StatusBar style="auto" />
+      </LocationProvider>
     </ThemeProvider>
   );
 }

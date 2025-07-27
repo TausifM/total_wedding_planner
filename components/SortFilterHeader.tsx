@@ -2,11 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import {
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const SORT_OPTIONS = ["Best Match", "Highest Rated", "Most Reviewed"];
@@ -76,7 +76,7 @@ export default function SortFilterHeader() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: "#cccacaff",
+    backgroundColor: "#e6e3e3ff",
     padding: 8,
     borderRadius: 12,
     justifyContent: "space-between",

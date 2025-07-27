@@ -2,7 +2,9 @@ import BackHeader from "@/components/BackHeader";
 import ThemedButton from "@/components/ThemedButton";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { useLocation } from "@/context/LocationContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
@@ -27,10 +29,11 @@ const FilterScreen = () => {
   const [selectedSort, setSelectedSort] = useState<string | null>(
     "Star Rating (highest first)"
   );
+  const { location } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<string>("$");
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
-
+  const navigation = useNavigation();
   const toggleCategory = (cat: string) => {
     setSelectedCategories((prev) =>
       prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
@@ -39,17 +42,28 @@ const FilterScreen = () => {
 
   return (
     <ThemedView style={styles.container}>
-        <BackHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 40, flexGrow: 1 ,paddingVertical: 80 }} showsVerticalScrollIndicator={false}
-  showsHorizontalScrollIndicator={false}>
+      <BackHeader />
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 40,
+          flexGrow: 1,
+          paddingVertical: 80,
+        }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         <View style={styles.header}>
-          <ThemedText type="title" style={styles.title}>Filter</ThemedText>
+          <ThemedText type="title" style={styles.title}>
+            Filter
+          </ThemedText>
           <TouchableOpacity>
             <ThemedText style={styles.reset}>Reset</ThemedText>
           </TouchableOpacity>
         </View>
 
-        <ThemedText type="subtitle" style={styles.sectionTitle}>Sort Options</ThemedText>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Sort Options
+        </ThemedText>
         {SORT_OPTIONS.map((option) => (
           <TouchableOpacity
             key={option}
@@ -63,7 +77,9 @@ const FilterScreen = () => {
           </TouchableOpacity>
         ))}
 
-        <ThemedText type="subtitle"  style={styles.sectionTitle}>Categories</ThemedText>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Categories
+        </ThemedText>
         <View style={styles.flexWrapRow}>
           {CATEGORIES.map((cat) => (
             <TouchableOpacity
@@ -86,13 +102,25 @@ const FilterScreen = () => {
           ))}
         </View>
 
-        <ThemedText type="subtitle"  style={styles.sectionTitle}>More Options</ThemedText>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          More Options
+        </ThemedText>
         <View style={styles.rowSpaceBetween}>
           <ThemedText>Location</ThemedText>
-          <ThemedText style={{ color: "#aaa" }}>San Francisco</ThemedText>
+          <ThemedText type="buttonLabel">
+            {location ? location.city : "Not set"}
+          </ThemedText>
+          <TouchableOpacity
+            style={[styles.pill, { marginTop: -4 }]}
+            onPress={() => navigation.navigate("location_screen" as never)}
+          >
+            <ThemedText style={styles.pillText}>Change</ThemedText>
+          </TouchableOpacity>
         </View>
 
-        <ThemedText type="subtitle"  style={styles.sectionTitle}>Budget</ThemedText>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Budget
+        </ThemedText>
         <View style={styles.flexWrapRow}>
           {["$", "$$", "$$$"].map((symbol) => (
             <TouchableOpacity
@@ -115,7 +143,9 @@ const FilterScreen = () => {
           ))}
         </View>
 
-        <ThemedText type="subtitle"  style={styles.sectionTitle}>Star Rating</ThemedText>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Star Rating
+        </ThemedText>
         <View style={styles.flexWrapRow}>
           {[1, 2, 3, 4, 5].map((star) => (
             <TouchableOpacity
@@ -132,7 +162,12 @@ const FilterScreen = () => {
                   selectedStars === star && styles.starTextSelected,
                 ]}
               >
-                {star} { star ?  <Ionicons name="star" size={12} color="#FF8A8A" /> : "No Rating" }
+                {star}{" "}
+                {star ? (
+                  <Ionicons name="star" size={12} color="#FF8A8A" />
+                ) : (
+                  "No Rating"
+                )}
               </ThemedText>
             </TouchableOpacity>
           ))}
@@ -141,7 +176,7 @@ const FilterScreen = () => {
         <ThemedButton
           label="Apply Filters"
           style={styles.applyButton}
-         // textStyle={styles.applyButtonText}
+          // textStyle={styles.applyButtonText}
           onPress={() => {
             // Apply filter logic
             console.log("Applied filters");
@@ -174,7 +209,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    marginTop: 25,
+    marginTop: 14,
     marginBottom: 10,
     fontWeight: "500",
   },
@@ -198,6 +233,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
+    borderBottomColor: "#dad9d9ff",
+    borderBottomWidth: 1,
+    paddingBottom: 10,
   },
   pill: {
     borderWidth: 1,
